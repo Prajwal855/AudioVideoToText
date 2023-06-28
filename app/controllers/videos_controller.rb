@@ -44,7 +44,7 @@ class VideosController < ApplicationController
         video_file = active_storage_disk_service.send(:path_for, video.video_file.blob.key)
     
     
-        video_service = Api::V1::TranscriptionService.new()
+        video_service = TranscriptionService.new()
         transcription = video_service.upload(video_file)
     
         transcribed_words = transcription.split(/\W+/).to_a

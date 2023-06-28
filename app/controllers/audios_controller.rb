@@ -3,7 +3,7 @@ class AudiosController < ApplicationController
         audios = current_user.audios
         if audio.empty?
             render json:{
-            message: "Audios not Found For Current USer",
+            message: "Audios not Found For Current User",
             user: current_user,
             audio_transcrptions: []
             }, status: :not_found
@@ -37,14 +37,14 @@ class AudiosController < ApplicationController
     
       def create
         flagged_words = ['samsung', 'guy', 'apple']
-        audio = current_user.audios.create(audio_params)
+        audio = current_user.audio.create(audio_params)
         audio.save
     
         active_storage_disk_service = ActiveStorage::Service::DiskService.new(root: Rails.root.to_s + '/storage/')
         audio_file = active_storage_disk_service.send(:path_for, audio.audio_file.blob.key)
     
     
-        audio_service = Api::V1::TranscriptionService.new()
+        audio_service = TranscriptionService.new()
         transcription = audio_service.upload(audio_file)
     
         transcribed_words = transcription.split(/\W+/).to_a
